@@ -1,0 +1,45 @@
+<a id="home-link" routerLink="">
+  <h1 id="main-title">CourseWork</h1>
+</a>
+
+<div class="form-group has-search">
+  <span class="fa fa-search form-control-feedback"></span>
+  <input
+    type="search"
+    class="form-control"
+    placeholder="Search CourseWork"
+    #searchBox
+    id="search-box"
+    (input)="search(searchBox.value)"
+  />
+</div>
+
+<div class="right-side">
+  <a
+    routerLink="/account/login"
+    class="button login-button"
+    *ngIf="userName === undefined"
+    >Login</a
+  >
+  <a
+    id="userName"
+    routerLink="/user"
+    class="button login-button"
+    *ngIf="userObj != undefined"
+    >{{ userObj.userName }}</a
+  >
+  <a
+    *ngIf="userName?.toLowerCase() != 'admin'"
+    class="button cart-button"
+    routerLink="/cart"
+  >
+    <i class="material-icons">shopping_cart</i>
+    <span
+      class="badge badge-warning"
+      id="lblCartCount"
+      *ngIf="userObj != undefined && userName !== 'Admin'"
+    >
+      {{ userObj.shoppingCart.length }}
+    </span>
+  </a>
+</div>

@@ -1,0 +1,35 @@
+.has-search .form-control {
+  padding-left: 21px;
+  height: 30px;
+  width: 400px;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  padding: 7px;
+  pointer-events: none;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+}
+
+#userName {
+  font-weight: bold;
+  font-size: x-large;
+  background: none;
+  color: white;
+}
+
+#lblCartCount {
+  font-size: 12px;
+  background: #ff0000;
+  color: #fff;
+  padding: 0 6px;
+  vertical-align: top;
+  margin-left: -12px;
+  margin-bottom: 13px;
+}

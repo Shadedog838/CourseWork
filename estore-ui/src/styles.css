@@ -1,0 +1,155 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+* {
+  font-family: "Roboto", Arial, sans-serif;
+  color: #616161;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+router-outlet + * {
+  padding: 0 16px;
+}
+/* Text */
+
+h1 {
+  font-size: 32px;
+}
+
+#main-title {
+  font-weight: bold;
+  font-size: xx-large;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding-top: 10px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h1,
+h2 {
+  font-weight: lighter;
+}
+
+p {
+  font-size: 14px;
+}
+
+.right-side {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+/* Hyperlink */
+
+a {
+  cursor: pointer;
+  color: #1976d2;
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+/* Button */
+
+.button,
+button {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 2px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+}
+
+.button:hover,
+button:hover {
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+.button:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: auto;
+}
+/* login Button */
+
+.login-button {
+  background-color: white;
+  color: #1976d2;
+}
+/* Cart Button */
+
+.cart-button {
+  background-color: white;
+  color: #1976d2;
+  margin-left: 20px;
+}
+
+.cart-button i.material-icons {
+  color: #1976d2;
+  padding-right: 4px;
+}
+
+#lblCartCount {
+  font-size: 12px;
+  background: #ff0000;
+  color: #fff;
+  padding: 0 5px;
+  vertical-align: top;
+  margin-left: -12px;
+  margin-bottom: 10px;
+}
+
+.badge {
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 10px;
+}
+/* top-bar styles */
+
+app-top-bar {
+  width: 100%;
+  height: 68px;
+  background-color: #1976d2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+app-top-bar h1 {
+  color: white;
+  margin: 0;
+}
+
+.btn-outline-danger {
+  border: 1px solid #dc3545;
+  background: transparent;
+  color: #dc3545;
+}
+
+.btn-outline-success {
+  border: 1px solid #28a745;
+  background: transparent;
+  color: #28a745;
+}

@@ -1,0 +1,61 @@
+<div>
+  <tab-display>
+    <tab title="Courses">
+      <button
+        [queryParams]="{ formTitle: 'Add Course' }"
+        routerLink="/course-form"
+      >
+        Add Course
+      </button>
+      <ul class="course-list">
+        <li *ngFor="let course of courses">
+          <p>{{ course.title }}</p>
+          <div class="button-container">
+            <button
+              [queryParams]="{ courseId: course.id, formTitle: 'Edit Course' }"
+              routerLink="/course-form"
+            >
+              Edit
+            </button>
+            <button
+              (click)="
+                openConfirmModal(
+                  'Delete Course',
+                  'Are you sure you want to delete this course?',
+                  course
+                )
+              "
+              class="btn-outline-danger"
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+    </tab>
+    <tab title="Users">
+      <ul>
+        <li *ngFor="let user of users">
+          <p>{{ user.userName }}</p>
+          <div class="button-container">
+            <button
+              (click)="banUser(user.userName)"
+              *ngIf="!user.banned; else unbanButton"
+              class="btn-outline-danger"
+            >
+              Ban
+            </button>
+            <ng-template #unbanButton>
+              <button
+                (click)="unbanUser(user.userName)"
+                class="btn-outline-success"
+              >
+                Unban
+              </button>
+            </ng-template>
+          </div>
+        </li>
+      </ul>
+    </tab>
+  </tab-display>
+</div>

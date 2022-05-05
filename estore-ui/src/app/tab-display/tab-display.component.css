@@ -1,0 +1,23 @@
+ul {
+  display: flex;
+  list-style: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* change this to active */
+li:hover {
+  background-color: #ddd;
+}
+
+li.active {
+  background-color: #f4f4f4;
+  border-bottom: 2px solid #1976d2;
+}

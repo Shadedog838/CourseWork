@@ -1,0 +1,41 @@
+<div *ngIf="course">
+    <header>
+        <h1>{{ course.title }}</h1>
+    </header>
+    <div class="info">
+        <aside *ngIf="!hasCourses(course)">
+            <ul>
+                <li>{{ course.price | currency: "USD":"symbol" }}</li>
+                <li>Enrolled: {{ course.studentsEnrolled }}</li>
+            </ul>
+        </aside>
+    </div>
+    <button [disabled]="user?.userName?.toLowerCase() == 'admin'" *ngIf="!hasCourses(course)" (click)="addCourseToCart(course)">
+    Add to Cart
+  </button>
+    <div class="container">
+        <h2 id="description">Course Description</h2>
+        <p>{{ course.description }}</p>
+    </div>
+    <div class="container">
+        <h2>Lessons</h2>
+    </div>
+    <div *ngFor="let lesson of course.content">
+        <div class="content">
+            <div class="lesson">
+                <h3>{{ lesson.title }}</h3>
+                <div class="play_button">
+                    <img (click)="openModal(lesson, course)" src=" /assets/img/play.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h3>Tags</h3>
+        <ul class="nav" *ngFor="let tag of course.tags">
+            <li>
+                <a routerLink="/search/{{ tag }}">{{ tag }}</a>
+            </li>
+        </ul>
+    </div>
+</div>

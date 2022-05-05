@@ -1,0 +1,27 @@
+.card {
+  box-shadow: 0.5rem 0.5rem 2rem grey;
+  background-color: rgb(255, 255, 255);
+  height: max-content;
+  margin: 10% auto auto;
+  padding: inherit inherit 3rem;
+}
+.invalid-message {
+  border-radius: 0.5rem;
+  height: fit-content;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin: auto;
+  background-color: rgba(255, 0, 0, 0.5);
+}
+.invalid-message ul {
+  height: fit-content;
+  padding-left: 1.6rem;
+}
+.invalid-message li {
+  height: max-content;
+  line-height: 1rem;
+  text-align: left;
+  padding: 0.2rem;
+  font-size: small;
+  font-weight: 700;
+}

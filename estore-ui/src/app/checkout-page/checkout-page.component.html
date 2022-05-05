@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="window">
+    <div class="order-info">
+      <div class="order-info-content">
+        <h2>Order Summary</h2>
+        <div class="line"></div>
+        <div *ngFor="let course of courses">
+          <div class="order-table">
+            <div class="individual-course">
+              <div class="course-title">
+                {{ course.title }}
+              </div>
+              <div class="course-price">
+                {{ course.price }}
+              </div>
+            </div>
+          </div>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="total">
+        <div style="flex: auto">TOTAL</div>
+        <div class="total-price">${{ price }}</div>
+      </div>
+    </div>
+    <button class="btn payBtn" (click)="addcourses()">Pay us</button>
+  </div>
+</div>

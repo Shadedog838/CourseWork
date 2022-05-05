@@ -1,0 +1,82 @@
+input::placeholder {
+  color: #949494;
+}
+
+.labeled-input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  padding: 0.5rem;
+}
+
+#description {
+  resize: vertical;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  width: 500px;
+}
+
+.form-container button {
+  align-content: flex-end;
+}
+
+.container {
+  justify-content: flex-end;
+}
+
+.container button {
+  margin-left: 1rem;
+}
+
+.btn-outline-secondary {
+  outline: 0;
+  background: transparent;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+#lesson-list > li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.lesson-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.lesson-info p {
+  margin-bottom: 0;
+  margin-right: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.lesson-title {
+  font-weight: bold;
+}
+
+.lesson-video {
+  color: #949494;
+}

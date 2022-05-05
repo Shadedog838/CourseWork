@@ -1,0 +1,26 @@
+<header>
+    <h1>Our Courses</h1>
+</header>
+
+<div class="course-container">
+    <div class="message" *ngIf="(courses$ | async)?.length == 0">
+        <h2>No Courses Found!</h2>
+    </div>
+    <section class="course" *ngFor="let course of courses$ | async">
+        <img class="img" *ngIf="course.image.link != null" src="{{ course.image.link }}" />
+        <img class="img" *ngIf="course.image.link == null" src="/assets/img/default.jpg" alt="default course img" />
+        <a routerLink="/course-page/{{ course.id }}">
+            <h2>{{ course.title }}</h2>
+        </a>
+        <p>{{ course.description }}</p>
+        <aside>
+            <ul>
+                <li>{{ course.price | currency: "USD":"symbol" }}</li>
+                <li>Enrolled: {{ course.studentsEnrolled }}</li>
+            </ul>
+            <button [disabled]="user?.userName?.toLowerCase() == 'admin'" (click)="addCourseToCart(course)">
+        Add to Cart
+      </button>
+        </aside>
+    </section>
+</div>

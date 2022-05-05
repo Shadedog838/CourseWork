@@ -1,0 +1,33 @@
+.invalid-message {
+  border-radius: 0.5rem;
+  width: 80%;
+  padding-bottom: 0.2rem;
+  margin: auto;
+  padding-top: 0.2rem;
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.invalid-message li {
+  text-align: left;
+  color: rgba(84, 78, 78, 0.734);
+  line-height: 1rem;
+  padding: 0.2rem;
+  font-size: small;
+  font-weight: 700;
+}
+
+.invalid-form ul {
+  height: fit-content;
+  padding-left: 1.6rem;
+}
+
+.card {
+  box-shadow: 0.5rem 0.5rem 2rem grey;
+  background-color: rgb(255, 255, 255);
+  margin: 10% auto auto;
+  padding: inherit inherit 3rem;
+}
+
+button {
+  display: inline-block;
+}

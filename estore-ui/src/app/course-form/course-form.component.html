@@ -1,0 +1,49 @@
+<div class="form-container">
+    <form #courseForm="ngForm" (ngSubmit)="onSubmit()" ngNativeValidate>
+        <div class="form-group">
+            <h1>{{title}}</h1>
+            <div class="labeled-input">
+                <label for="image">Image upload</label>
+                <input id="image" type="file" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChanged($event)">
+            </div>
+            <div class="labeled-input">
+                <label for="title">Title</label>
+                <input [(ngModel)]="model.title" class="form-control" id="title" name="title" placeholder="Title" required type="text" required>
+            </div>
+            <div class=" labeled-input ">
+                <label for="description ">Description</label>
+                <textarea [(ngModel)]="model.description " class="form-control " id="description " name="description " placeholder="Description "></textarea>
+            </div>
+            <div class="labeled-input ">
+                <label for="lesson-list ">Lessons</label>
+                <ul id="lesson-list ">
+                    <li *ngFor="let lesson of model.content ">
+                        <div class="lesson-info ">
+                            <p class="lesson-title">{{lesson.title}}</p>
+                            <p class="lesson-video">{{lesson.video}}</p>
+                        </div>
+                        <div class="container ">
+                            <button (click)="openLessonModal(lesson, true); $event.preventDefault() ">Edit</button>
+                            <button (click)="removeLesson(lesson); $event.preventDefault() " class="btn btn-outline-danger ">Delete</button>
+                        </div>
+                    </li>
+                </ul>
+                <div class="container ">
+                    <button (click)="openLessonModal(); $event.preventDefault() " class="btn ">Add Lesson</button>
+                </div>
+            </div>
+            <div class="labeled-input ">
+                <label for="price ">Price</label>
+                <input [(ngModel)]="model.price " required type="number" min="0.00" max="10000.00" step="any" class="form-control " id="price " name="price " placeholder="Price ">
+            </div>
+            <div class=" labeled-input ">
+                <label for="tags ">Tags</label>
+                <input [(ngModel)]="model.tags " class="form-control " id="tags " name="tags " placeholder="e.g. math, biology, physics, etc. " type="text ">
+            </div>
+        </div>
+        <div class="container ">
+            <button class="btn btn-outline-secondary " routerLink="/user " type="button ">Cancel</button>
+            <button class="btn btn-primary " type="submit ">Submit</button>
+        </div>
+    </form>
+</div>

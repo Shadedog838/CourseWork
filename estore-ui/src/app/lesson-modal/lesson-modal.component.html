@@ -1,0 +1,26 @@
+<div class="form-container center-flex">
+    <form [formGroup]="form" #lessonForm="ngForm">
+        <div class="labeled-input">
+            <label for="lesson-title">Title</label>
+            <input formControlName="lessonTitle" type="text" class="form-control" id="lesson-title" name="lesson-title" [ngClass]="{ 'is-invalid': submitted && f['lessonTitle'].errors }" [(ngModel)]="model.title" placeholder="Title" required>
+            <div *ngIf="submitted && f['lessonTitle'].errors" class="invalid-feedback">
+                <div *ngIf="f['lessonTitle'].errors['required']">Lesson title is required</div>
+                <div *ngIf="f['lessonTitle'].errors['pattern']">Invalid input</div>
+            </div>
+        </div>
+        <div class="labeled-input">
+            <label for="lesson-video">Video</label>
+            <input formControlName="lessonVideo" type="url" class="form-control" id="lesson-video" name="lesson-video" [ngClass]="{ 'is-invalid': submitted && f['lessonVideo'].errors }" [(ngModel)]="model.video" placeholder="e.g. https://www.youtube.com/embed/dli9dnvnd"
+                required>
+            <div *ngIf=" submitted && f[ 'lessonVideo'].errors " class="invalid-feedback ">
+                <div *ngIf="f[ 'lessonVideo'].errors[ 'required'] ">Lesson video is required</div>
+                <div *ngIf="f[ 'lessonVideo'].errors[ 'pattern'] ">Only embedded youtube links are accepted</div>
+            </div>
+        </div>
+
+        <div class=" container ">
+            <button class="btn-outline-secondary " (click)="close() ">Cancel</button>
+            <button (click)="onSubmit() ">Submit</button>
+        </div>
+    </form>
+</div>

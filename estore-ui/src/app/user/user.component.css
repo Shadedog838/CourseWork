@@ -1,0 +1,13 @@
+h1 {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+  color: #1976d2;
+  cursor: pointer;
+}
+
+h2:hover {
+  opacity: 0.5;
+}

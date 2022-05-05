@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+    <hr>
+    <div *ngIf="restricted === false" class="videoWrapper">
+        <iframe [src]=" safeUrl " frameborder="0 " allowfullscreen></iframe>
+    </div>
+    <div *ngIf="restricted===true " class="textWrapper ">
+        <h2>Access Denied: Course has not been purchased</h2>
+    </div>
+</mat-dialog-content>
+
+<hr />
+
+<mat-dialog-actions class="app-dialog-actions">
+    <button type="button " class="btn btn-primary btn-sm" (click)="close()">
+    Close
+  </button>
+</mat-dialog-actions>

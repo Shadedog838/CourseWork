@@ -1,0 +1,107 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    width: 30px;
+    height: 30px;
+    margin: 0 0 0 10px;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1% 0 0 30%;
+    width: 50%;
+    word-wrap: break-word;
+}
+
+#description {
+    border-bottom: 1px solid #ccc;
+}
+
+h2 {
+    border-bottom: 1px solid #ccc;
+    margin: 1% 40% 0 0;
+}
+
+.lesson {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style: none;
+    margin: 40px 0 0 0;
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 10px 0;
+    width: 500px;
+}
+
+.play_button {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    cursor: pointer;
+}
+
+.play_button:hover {
+    opacity: 0.5;
+}
+
+button {
+    background: #009999 url("/assets/img/check-button.png");
+    background-repeat: no-repeat;
+    background-position: 2em 50%;
+    background-size: 2em;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 1em 3em;
+    padding-left: 6em;
+    text-transform: uppercase;
+    display: block;
+    width: 30%;
+    margin: 0 auto;
+}
+
+button:hover {
+    background-color: #006b6b;
+    background-size: 3em;
+    background-position: 1.5em 50%;
+}
+
+.info ul {
+    display: flex;
+    justify-content: center;
+}
+
+.info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.info li {
+    background: #eee;
+    font-weight: 700;
+    padding: 0.3em 0.6em;
+    border-radius: 1em;
+    margin: 0 5px;
+}
