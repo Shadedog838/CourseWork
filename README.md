@@ -8,7 +8,7 @@ An online E-store system built with Angular and Spring for selling online course
 - Shandon Mith
 - Rhythm K C
 - Andrew Chang
-- Hunter Davenport (some commits will be under dablenparty)
+- Hunter Davenport
 
 ## Prerequisites
 
