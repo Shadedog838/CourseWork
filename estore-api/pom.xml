@@ -39,7 +39,7 @@
   		<artifactId>spring-boot-starter-validation</artifactId>
 	</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -160,6 +160,11 @@
 			 		</execution>
 				</executions>
 			</plugin>
+			<plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>3.0.3</version>
+      </plugin>
 		</plugins>
 	</build>
 </project>
