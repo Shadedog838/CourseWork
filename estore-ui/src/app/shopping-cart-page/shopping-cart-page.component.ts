@@ -15,10 +15,7 @@ export class ShoppingCartPageComponent implements OnInit {
   user: User | undefined = undefined;
 
   constructor(private router: Router, private userService: UserService) {
-    if (
-      !this.userService.getloginStatus() ||
-      localStorage.getItem('user') == 'Admin'
-    ) {
+    if ( !this.userService.getloginStatus()) {
       this.router.navigate(['']);
     }
   }
@@ -28,13 +25,11 @@ export class ShoppingCartPageComponent implements OnInit {
   }
 
   getCart(): void {
-    console.log('component user:', this.user);
 
     if (this.userService.getloginStatus()) {
       this.userService
         .getUserShoppingCart(this.user?.userName || '')
         .subscribe((courses) => (this.cart = courses));
-      console.log(this.cart);
     }
   }
 
@@ -47,7 +42,7 @@ export class ShoppingCartPageComponent implements OnInit {
         .pipe(
           concatMap((value) => {
             this.user = value;
-            return this.userService.getUserShoppingCart(value.userName);
+            return this.userService.getUserShoppingCart(value.id);
           })
         )
         .subscribe((userObj) => (this.cart = userObj));
@@ -61,7 +56,6 @@ export class ShoppingCartPageComponent implements OnInit {
           (c) => c !== course.id
         );
       }
-      console.log(this.user.shoppingCart);
       this.userService
         .updateUser(this.user)
         .subscribe((userObj) => (this.user = userObj));

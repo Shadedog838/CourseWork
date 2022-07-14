@@ -10,11 +10,11 @@ import { User } from '../User';
   styleUrls: ['./top-bar.component.css'],
 })
 export class TopBarComponent implements OnInit {
-  userName: string | undefined = undefined;
+  userId: string | undefined = undefined;
   userObj: User | undefined;
   constructor(private router: Router, private userService: UserService) {
     if (userService.getloginStatus()) {
-      this.userName = localStorage.getItem('user') || '';
+      this.userId = localStorage.getItem('user') || '';
     }
   }
 
@@ -32,9 +32,9 @@ export class TopBarComponent implements OnInit {
   }
 
   getUser(): void {
-    if (this.userName === undefined) return;
+    if (this.userId === undefined) return;
     this.userService
-      .getUser(this.userName)
+      .getUser(this.userId)
       .subscribe((userObj) => (this.userObj = userObj));
   }
 }

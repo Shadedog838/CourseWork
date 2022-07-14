@@ -2,7 +2,7 @@ import { Image } from './Image';
 import { lesson } from './lesson';
 
 export interface Course {
-  id: number;
+  id: string;
   image: Image;
   title: string;
   price: number;

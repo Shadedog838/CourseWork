@@ -1,7 +1,7 @@
 package com.estore.api.estoreapi.controller.requests;
 
-import com.estore.api.estoreapi.model.Course;
-import com.estore.api.estoreapi.model.User;
+import com.estore.api.estoreapi.models.Course;
+import com.estore.api.estoreapi.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -11,26 +11,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AuthenticatedRequest<T> {
     @JsonProperty("data")
     private final T data;
-    @JsonProperty("userName")
-    private final String userName;
+    @JsonProperty("userId")
+    private final String userId;
 
     /**
      * Creates a new {@link AuthenticatedRequest} with the given course and user.
      *
      * @param data     The course.
-     * @param userName The username.
+     * @param userName The userid.
      */
-    public AuthenticatedRequest(@JsonProperty("data") T data, @JsonProperty("userName") String userName) {
+    public AuthenticatedRequest(@JsonProperty("data") T data, @JsonProperty("userId") String userId) {
         this.data = data;
-        this.userName = userName;
+        this.userId = userId;
     }
 
     public T getData() {
         return data;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserId() {
+        return userId;
     }
 
 }

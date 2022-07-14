@@ -1,16 +1,21 @@
 package com.estore.api.estoreapi.controller;
 
 import com.estore.api.estoreapi.controller.requests.AuthenticatedRequest;
-import com.estore.api.estoreapi.model.Course;
-import com.estore.api.estoreapi.model.User;
-import com.estore.api.estoreapi.persistence.CourseDAO;
-import com.estore.api.estoreapi.persistence.UserDAO;
+import com.estore.api.estoreapi.helper.DataHelper;
+import com.estore.api.estoreapi.models.Course;
+import com.estore.api.estoreapi.models.User;
+import com.estore.api.estoreapi.repository.CourseRepository;
+import com.estore.api.estoreapi.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,21 +31,14 @@ import java.util.logging.Logger;
 @RequestMapping("courses")
 public class CourseController {
     private static final Logger LOG = Logger.getLogger(CourseController.class.getName());
-    private final CourseDAO courseDao;
-    private final UserDAO userDAO;
+    @Autowired
+    CourseRepository courseRepository;
+    private final DataHelper dataHelper;
+    UserRepository userRepository;
 
-    /**
-     * Creates a REST API controller to reponds to requests
-     *
-     * @param courseDao The {@link CourseDAO Course Data Access Object} to perform
-     *                  CRUD operations
-     *                  <br>
-     *                  This dependency is injected by the Spring Framework
-     */
-    public CourseController(UserDAO userDAO, CourseDAO courseDao) {
-        this.courseDao = courseDao;
-        this.userDAO = userDAO;
-        this.courseDao.setUserDAO(userDAO);
+    public CourseController(DataHelper dataHelper, UserRepository userRepository) {
+        this.dataHelper = dataHelper;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -54,22 +52,21 @@ public class CourseController {
      */
     @PostMapping("")
     public ResponseEntity<Course> createCourse(@RequestBody AuthenticatedRequest<Course> authenticatedRequest) {
-        LOG.info("POST /courses " + authenticatedRequest);
+        LOG.info("POST /courses " + authenticatedRequest.getUserId());
         Course course = authenticatedRequest.getData();
-        String userName = authenticatedRequest.getUserName();
-
+        String userId = authenticatedRequest.getUserId();
+        String userName = userRepository.findById(userId).get().getUserName();
         if (!userName.equalsIgnoreCase(User.ADMIN_USER_NAME)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        // create course object and return the response
-        // if the course object already exists, return a conflict
         try {
-            return courseDao.createCourse(course) == null ? new ResponseEntity<>(HttpStatus.CONFLICT)
-                    : new ResponseEntity<>(course, HttpStatus.CREATED);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, e.getLocalizedMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            Course _course = courseRepository.save(new Course(course.getImage(), course.getTitle(),
+             course.getPrice(), course.getDescription(), course.getStudentsEnrolled(), course.getTags(), course.getContent()));
+             return new ResponseEntity<Course>(_course, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -89,14 +86,15 @@ public class CourseController {
      *         GET http://localhost:8080/courses/?title=ma
      */
     @GetMapping("/")
-    public ResponseEntity<Course[]> searchCourses(@RequestParam String title) {
-        LOG.info("GET /courses/?title=" + title);
+    public ResponseEntity<List<Course>> searchCourses(@RequestParam String text) {
+        LOG.info("GET /courses/?text=" + text);
 
         try {
-            Course[] courses = courseDao.findCourses(title);
-
-            return new ResponseEntity<Course[]>(courses, HttpStatus.OK);
-        } catch (IOException e) {
+            List<Course> courses = new ArrayList<Course>();
+            Course[] coursesArr = dataHelper.getCoursesArray(text, courseRepository.findAll());
+            courses = Arrays.asList(coursesArr);
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -112,11 +110,14 @@ public class CourseController {
      *         ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourse(@PathVariable int id) {
+    public ResponseEntity<Course> getCourse(@PathVariable("id") String id) {
         LOG.info("GET /courses/" + id);
-        Course course = courseDao.getCourse(id);
-        return course != null ? new ResponseEntity<>(course, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Optional<Course> courseData = courseRepository.findById(id);
+        if (courseData.isPresent()) {
+            return new ResponseEntity<>(courseData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -129,15 +130,17 @@ public class CourseController {
      */
 
     @GetMapping("")
-    public ResponseEntity<Course[]> getCourses() {
+    public ResponseEntity<List<Course>> getCourses() {
         LOG.info("GET /courses");
 
         try {
-            Course[] courses = courseDao.getCourses();
-            return new ResponseEntity<Course[]>(courses, HttpStatus.OK);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, e.getLocalizedMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            List<Course> courses = new ArrayList<Course>();
+            courseRepository.findAll().forEach(courses::add);
+            Course[] coursesArr = dataHelper.getCoursesArray(null, courses);
+            courses = Arrays.asList(coursesArr);
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -156,21 +159,25 @@ public class CourseController {
     public ResponseEntity<Course> updateCourse(@RequestBody AuthenticatedRequest<Course> authenticatedRequest) {
         LOG.info("PUT /course" + authenticatedRequest);
         Course course = authenticatedRequest.getData();
-        String userName = authenticatedRequest.getUserName();
+        String userId = authenticatedRequest.getUserId();
+        String userName = userRepository.findById(userId).get().getUserName();
         if (!userName.equalsIgnoreCase(User.ADMIN_USER_NAME)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        try {
-            Course courseObj = courseDao.updateCourse(course);
-            if (courseObj == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(courseObj, HttpStatus.OK);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, e.getLocalizedMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
+        Optional<Course> courseData = courseRepository.findById(course.getId());
+        if (courseData.isPresent()) {
+            Course _course = courseData.get();
+            _course.setImage(course.getImage());
+            _course.setTitle(course.getTitle());
+            _course.setPrice(course.getPrice());
+            _course.setDescription(course.getDescription());
+            _course.setStudentsEnrolled(course.getStudentsEnrolled());
+            _course.setTags(course.getTags());
+            _course.setContent(course.getContent());
+            return new ResponseEntity<>(courseRepository.save(_course), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -184,17 +191,16 @@ public class CourseController {
      *         ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Course> deleteCourse(@PathVariable int id) {
+    public ResponseEntity<Course> deleteCourse(@PathVariable("id") String id) {
         LOG.info("DELETE/COURSES/" + id);
         try {
-            if (courseDao.deleteCourse(id) == true) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            if (dataHelper.deleteCourse(id)) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, e.getLocalizedMessage());
+        } catch ( Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
     }
 }

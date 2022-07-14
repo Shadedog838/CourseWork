@@ -2,7 +2,7 @@ package com.estore.api.estoreapi.ordering;
 
 import java.util.Comparator;
 
-import com.estore.api.estoreapi.model.Course;
+import com.estore.api.estoreapi.models.Course;
 
 /**
  * Comparator class for sorting a list of courses

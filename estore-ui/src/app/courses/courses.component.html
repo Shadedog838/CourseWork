@@ -1,6 +1,6 @@
 <div *ngIf="
     user != null &&
-    userName?.toLowerCase() != 'admin' &&
+    user.userName?.toLowerCase() != 'admin' &&
     recommendedCourses.length != 0
   ">
     <!-- && user.courses.length>0-->
@@ -37,7 +37,7 @@
         <h2>No Courses Found!</h2>
     </div>
     <section *ngFor="let course of courses" class="course">
-        <img *ngIf="course.image.link != null" src="{{ course.image.link }}" />
+        <img *ngIf="course.image.link != null " src="{{ course.image.link }}" />
         <img *ngIf="course.image.link == null" src="/assets/img/default.jpg" alt="default course img" />
         <a routerLink="/course-page/{{ course.id }}">
             <h2>{{ course.title }}</h2>

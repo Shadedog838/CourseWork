@@ -1,9 +1,11 @@
+import { renderFlagCheckIfStmt } from '@angular/compiler/src/render3/view/template';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Course } from '../course';
 import { User } from '../User';
 import { UserService } from '../user.service';
+import { Image } from '../Image';
 
 @Component({
   selector: 'app-user-page',
@@ -11,14 +13,21 @@ import { UserService } from '../user.service';
   styleUrls: ['./../../assets/css/bootstrap.css', './user-page.component.css'],
 })
 export class UserPageComponent implements OnInit {
-  userName = localStorage.getItem('user') || '';
+  userId = localStorage.getItem('user') || '';
   registeredCourses: Course[] = [];
   userInfoForm!: FormGroup;
+  invalid = false;
+  showPassword: boolean = false;
+  selectedFile: any;
+  imageUrl: any;
   user: User = {
+    id: '',
     userName: '',
-    name: '',
+    password: '',
     email: '',
-    address: '',
+    image: {
+      link: ''
+    },
     shoppingCart: [],
     courses: [],
     banned: false,
@@ -33,26 +42,41 @@ export class UserPageComponent implements OnInit {
     private router: Router
   ) {
     // getting the user
-    this.userService.getUser(this.userName).subscribe({
+    this.userService.getUser(this.userId).subscribe({
       next: (res) => {
         this.user = res;
       },
     });
     // getting user's registered courses
     this.userService
-      .getUserCourses(this.userName)
+      .getUserCourses(this.userId)
       .subscribe((res) => (this.registeredCourses = res));
   }
 
   ngOnInit(): void {
     // setting up userInfo form
     this.userInfoForm = this.formBuilder.group({
-      name: ['', [Validators.minLength(5), Validators.pattern('^[A-z]+ [A-z]+$')]],
-          
-      email: ['', [Validators.pattern("[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}")]],
+      image: [''],
+      userName: ['', [
+        Validators.minLength(4),
+        Validators.maxLength(12)
+      ]],
 
-      address: ['', [Validators.minLength(3)]],
+      password: ['', [Validators.minLength(6), Validators.maxLength(20)]],
+
+      email: ['', [Validators.pattern("[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}"), Validators.maxLength(50)]],
     });
+  }
+
+  public onFileChanged(event: any) {
+    let reader = new FileReader();
+    this.selectedFile = event.target.files[0];
+    if (event.target.files && event.target.files[0]) {
+      reader.readAsDataURL(this.selectedFile);
+      reader.onload = () => {
+        this.imageUrl = reader.result;
+      }
+    }
   }
 
   get f() {
@@ -65,14 +89,22 @@ export class UserPageComponent implements OnInit {
     if (this.userInfoForm.invalid) {
       return;
     }
-    if (formValue.name !== '') {
-      this.user.name = formValue.name;
+    if (formValue.userName !== '') {
+      this.user.userName = formValue.userName;
+    }
+    if (formValue.password !== '') {
+      this.user.password = formValue.password;
     }
     if (formValue.email !== '') {
       this.user.email = formValue.email;
     }
-    if (formValue.address !== '') {
-      this.user.address = formValue.address;
+
+    const image: Image = {
+      link: this.imageUrl,
+    };
+
+    if (image.link != null) {
+      this.user.image = image.link;
     }
     this.userService.updateUser(this.user).subscribe((res) => {
       this.user = res;
@@ -88,7 +120,11 @@ export class UserPageComponent implements OnInit {
     return this.editable;
   }
 
-  courseBtn(courseid: number) {
+  showHidePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  courseBtn(courseid: string) {
     this.router.navigate(['course-page/', courseid]);
   }
 }

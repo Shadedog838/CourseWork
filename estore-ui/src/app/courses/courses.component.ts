@@ -18,7 +18,7 @@ export class CoursesComponent implements OnInit {
   user: User | undefined;
   userPrevious: User | undefined;
 
-  userName?: String;
+  // userName?: String;
 
   constructor(
     private courseService: CourseService,
@@ -47,7 +47,7 @@ export class CoursesComponent implements OnInit {
   }
 
   getRecommendedCourses(): void {
-    if (this.user != null && localStorage.getItem('user') != 'Admin') {
+    if (this.user != null && this.user.userName != 'Admin') {
       this.userService
         .getRecommendedCourses(this.user)
         .subscribe((rCourses) => (this.recommendedCourses = rCourses));
@@ -62,7 +62,6 @@ export class CoursesComponent implements OnInit {
       ) {
         this.user.shoppingCart.push(course.id);
       }
-      console.log(this.user);
       this.userService
         .updateUser(this.user)
         .subscribe((userObj) => (this.user = userObj));

@@ -39,7 +39,7 @@
           <p>{{ user.userName }}</p>
           <div class="button-container">
             <button
-              (click)="banUser(user.userName)"
+              (click)="banUser(user.id)"
               *ngIf="!user.banned; else unbanButton"
               class="btn-outline-danger"
             >
@@ -47,7 +47,7 @@
             </button>
             <ng-template #unbanButton>
               <button
-                (click)="unbanUser(user.userName)"
+                (click)="unbanUser(user.id)"
                 class="btn-outline-success"
               >
                 Unban

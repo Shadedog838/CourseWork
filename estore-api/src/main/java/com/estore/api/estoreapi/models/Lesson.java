@@ -1,16 +1,19 @@
-package com.estore.api.estoreapi.model;
+package com.estore.api.estoreapi.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "courses")
 public class Lesson {
 
-    @JsonProperty("title")
     private String title;
 
-    @JsonProperty("video")
     private String video;
 
-    public Lesson(@JsonProperty("title") String title, @JsonProperty("video") String video) {
+
+    public Lesson() {
+        
+    }
+    public Lesson(String title, String video) {
         this.title = title;
         this.video = video;
     }

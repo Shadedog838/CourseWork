@@ -17,21 +17,49 @@
           <div *ngIf="f['userName'].errors['required']">
             Username is required
           </div>
-          <div *ngIf="f['userName'].errors['pattern']">
-            Username must be alphNumeric; starts with alphabets and end with digits 
-          </div>
           <div
             *ngIf="
               f['userName'].errors['minlength'] ||
               f['userName'].errors['maxlength']
             "
           >
-            Username must be between 4 to 10 characters long
+            Username must be between 4 to 12 characters long
           </div>
         </div>
-        <div *ngIf="invalid">
-          user does not exist or the user has been banned
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': (submitted && f['password'].errors) || invalid
+          }"
+        />
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">
+            Password is required
+          </div>
+          <div
+            *ngIf="
+              f['password'].errors['minlength'] ||
+              f['password'].errors['maxlength']
+            "
+          >
+            Password must be between 6 to 20 characters
+          </div>
         </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="showHidePassword()"
+      >
+        {{ showPassword ? "Hide" : "Show" }} Password
+      </button>
+      <div *ngIf="invalid">
+        Username or Password does not match or the user has been banned
       </div>
       <pre></pre>
       <div class="form-group">

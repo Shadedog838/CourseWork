@@ -101,5 +101,8 @@
             }
         }
     },
-    "defaultProject": "estore-ui"
+    "defaultProject": "estore-ui",
+    "cli": {
+      "analytics": "056f333e-c1b9-435a-b957-44026cd58ea4"
+    }
 }

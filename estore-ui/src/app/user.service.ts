@@ -29,12 +29,12 @@ export class UserService {
   constructor(private http: HttpClient) {
     this.user = new Subject<User>();
     this.loginStatus = new BehaviorSubject<boolean>(false);
-    let userName = localStorage.getItem('user');
+    let userId = localStorage.getItem('user');
     if (
-      userName != null &&
-      userName.match('^[a-zA-z]+[0-9]+$ || Admin') &&
-      userName.length >= 4 &&
-      userName.length <= 10
+      userId != null
+      // userName.match('^[a-zA-z]+[0-9]+$ || Admin') &&
+      // userName.length >= 4 &&
+      // userName.length <= 10
     ) {
       this.loginStatus.next(true);
     } else {
@@ -52,13 +52,13 @@ export class UserService {
     return this.user;
   }
   /** Get course by id. Will 404 if userName not found */
-  getUser(userName: string): Observable<User> {
-    const url = `${this.usersUrl}/${userName}`;
+  getUser(userId: string): Observable<User> {
+    const url = `${this.usersUrl}/${userId}`;
     this.http
       .get<User>(url)
       .pipe(
-        tap((_) => UserService.log(`fetched user userName=${userName}`)),
-        catchError(this.handleError<User>(`getUser userName=${userName}`))
+        tap((_) => UserService.log(`fetched user userId=${userId}`)),
+        catchError(this.handleError<User>(`getUser userId=${userId}`))
       )
       .subscribe((user) => this.user.next(user));
     return this.user;
@@ -70,7 +70,7 @@ export class UserService {
     if (usr == null) {
       url = `${this.usersUrl}/null/recommended/0`; // TODO: get rid of hardcoded value
     } else {
-      url = `${this.usersUrl}/${usr.userName}/recommended/5`; // TODO: get rid of hardcoded value
+      url = `${this.usersUrl}/${usr.id}/recommended/5`; // TODO: get rid of hardcoded value
     }
     return this.http.get<Course[]>(url).pipe(
       tap((_) => UserService.log('fetched recommendedCourses')),
@@ -79,24 +79,24 @@ export class UserService {
   }
 
   /* GET shopping cart associated with user */
-  getUserShoppingCart(userName: string): Observable<Course[]> {
-    const url = `${this.usersUrl}/${userName}/cart`;
+  getUserShoppingCart(userId: string): Observable<Course[]> {
+    const url = `${this.usersUrl}/${userId}/cart`;
     return this.http.get<Course[]>(url).pipe(
-      tap((_) => UserService.log(`fetched user cart userName=${userName}`)),
+      tap((_) => UserService.log(`fetched user cart userId=${userId}`)),
       catchError(
-        this.handleError<Course[]>(`getUserShoppingCart userName=${userName}`)
+        this.handleError<Course[]>(`getUserShoppingCart userId=${userId}`)
       )
     );
   }
 
-  getUserCourses(userName: string): Observable<Course[]> {
-    const url = `${this.usersUrl}/${userName}/courses`;
+  getUserCourses(userId: string): Observable<Course[]> {
+    const url = `${this.usersUrl}/${userId}/courses`;
     return this.http.get<Course[]>(url).pipe(
       tap((_) =>
-        UserService.log(`fetched user courses userName = ${userName}`)
+        UserService.log(`fetched user courses userId = ${userId}`)
       ),
       catchError(
-        this.handleError<Course[]>(`getUserCourses userName=${userName}`)
+        this.handleError<Course[]>(`getUserCourses userId=${userId}`)
       )
     );
   }
@@ -106,12 +106,7 @@ export class UserService {
    * @returns User Observable
    */
   updateUser(user: User): Observable<User> {
-    this.http
-      .put<User>(
-        this.usersUrl,
-        { data: user, userName: user.userName },
-        this.httpOptions
-      )
+    this.http.put<User>(`${this.usersUrl}/${user.id}`, user, this.httpOptions)
       .pipe(
         tap((updatedUser: User) => {
           UserService.log(`updated following user`);
@@ -137,16 +132,17 @@ export class UserService {
   }
 
   /** GET all users from the server */
-  getUsers(userName: string): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl, { params: { userName } }).pipe(
+  getUsers(userId: string): Observable<User[]> {
+    const url = `${this.usersUrl}?id=${userId}`;
+    return this.http.get<User[]>(url).pipe(
       tap((_) => UserService.log('fetched users')),
       catchError(this.handleError<User[]>('getUsers', []))
     );
   }
 
   /** POST: ban a user */
-  banUser(userName: string, requesterName: string): Observable<User> {
-    const url = `${this.usersUrl}/${userName}/ban`;
+  banUser(userId: string, requesterName: string): Observable<User> {
+    const url = `${this.usersUrl}/${userId}/ban`;
     this.http
       .post<User>(url, requesterName, this.httpOptions)
       .pipe(
@@ -157,16 +153,16 @@ export class UserService {
         catchError(this.handleError<User>('banUser'))
       )
       .subscribe((user) => {
-        const userName = localStorage.getItem('user');
-        user.userName = userName ?? user.userName;
+        const userId = localStorage.getItem('user');
+        user.id = userId ?? user.id;
         this.user.next(user);
       });
     return this.user;
   }
 
   /** POST: unban a user */
-  unbanUser(userName: string, requesterName: string): Observable<User> {
-    const url = `${this.usersUrl}/${userName}/unban`;
+  unbanUser(userId: string, requesterName: string): Observable<User> {
+    const url = `${this.usersUrl}/${userId}/unban`;
     this.http
       .post<User>(url, requesterName, this.httpOptions)
       .pipe(
@@ -177,8 +173,8 @@ export class UserService {
         catchError(this.handleError<User>('unbanUser'))
       )
       .subscribe((user) => {
-        const userName = localStorage.getItem('user');
-        user.userName = userName ?? user.userName;
+        const userId = localStorage.getItem('user');
+        user.id = userId ?? user.id;
         this.user.next(user);
       });
     return this.user;
@@ -201,7 +197,7 @@ export class UserService {
     return this.http.post<User>(url, user, this.httpOptions).pipe(
       tap((res) => {
         UserService.log('user Logged in');
-        localStorage.setItem('user', res.userName);
+        localStorage.setItem('user', res.id);
         this.loginStatus.next(true);
       })
     );
@@ -216,7 +212,7 @@ export class UserService {
     const url = `${this.usersUrl}/register`;
     return this.http.post<User>(url, user, this.httpOptions).pipe(
       tap((newUser: User) => {
-        UserService.log(`added user w/ userName=${newUser.userName}`);
+        UserService.log(`added user w/ userId=${newUser.id}`);
       })
     );
   }

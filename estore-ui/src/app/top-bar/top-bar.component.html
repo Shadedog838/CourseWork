@@ -18,7 +18,7 @@
   <a
     routerLink="/account/login"
     class="button login-button"
-    *ngIf="userName === undefined"
+    *ngIf="userId === undefined"
     >Login</a
   >
   <a
@@ -29,7 +29,7 @@
     >{{ userObj.userName }}</a
   >
   <a
-    *ngIf="userName?.toLowerCase() != 'admin'"
+    *ngIf="userObj != undefined && userObj.userName?.toLowerCase() != 'admin'"
     class="button cart-button"
     routerLink="/cart"
   >
@@ -37,7 +37,7 @@
     <span
       class="badge badge-warning"
       id="lblCartCount"
-      *ngIf="userObj != undefined && userName !== 'Admin'"
+      *ngIf="userObj != undefined && userObj.userName !== 'Admin'"
     >
       {{ userObj.shoppingCart.length }}
     </span>

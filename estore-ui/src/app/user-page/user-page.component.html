@@ -1,140 +1,223 @@
 <div class="container">
-    <div class="main-body">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-column align-items-center text-center">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110" />
-                            <div class="mt-3">
-                                <h4>{{ user.userName }}</h4>
-                                <!-- <button class="btn btn-primary">Logout</button> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="main-body">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              <img *ngIf="user.image?.link != null"
+                src={{user.image.link}}
+                alt="Admin"
+                class="rounded-circle p-1 bg-primary"
+                width="110"
+                height="110"
+              />
+              <img *ngIf="user.image?.link == null"
+                src="/assets/img/default-profile-pic.png"
+                alt="Admin"
+                class="rounded-circle p-1 bg-primary"
+                width="110"
+              />
+              <div class="mt-3">
+                <h4>{{ user.userName }}</h4>
+                <!-- <button class="btn btn-primary">Logout</button> -->
+              </div>
             </div>
-            <div class="col-lg-6" [hidden]="!editable">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="userInfoForm">
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Full Name</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <input formControlName="name" type="text" class="form-control" value="{{ user.name }}" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" />
-                                    <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
-                                        <div *ngIf="f['name'].errors['minlength']">
-                                            Name must be five or more letters
-                                        </div>
-                                        <div *ngIf="f['name'].errors['pattern']">
-                                            Name can not have symbols, special characters or numbers
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Email</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <input formControlName="email" type="text" class="form-control" value="{{ user.email }}" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
-                                    <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-                                        <div *ngIf="f['email'].errors['pattern']">Invalid Email</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Address</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <input type="text" class="form-control" formControlName="address" value="{{ user.address }}" [ngClass]="{
-                      'is-invalid': submitted && f['address'].errors
-                    }" />
-                                    <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
-                                        <div *ngIf="f['address'].errors['minlength']">
-                                            Address must be three or more letters
-                                        </div>
-                                        <div *ngIf="f['address'].errors['pattern']">
-                                            Address can not have symbols, special characters or numbers
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-secondary submit-cancel-btn">
-                                    <button [disabled]="userInfoForm.pristine" type="button" (click)="onSubmit()" class="btn btn-primary px-4">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6" [hidden]="!editable">
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="userInfoForm">
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Profile Image</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input
+                    id="image"
+                    type="file"
+                    formControlName="image"
+                    accept=".png, .jpg, .jpeg"
+                    #fileInput
+                    value=""
+                    (change)="onFileChanged($event)"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input
+                    formControlName="email"
+                    type="text"
+                    class="form-control"
+                    value="{{ user.email }}"
+                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                  />
+                  <div
+                    *ngIf="submitted && f['email'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['email'].errors['pattern']">
+                      Invalid Email
+                    </div>
+                    <div *ngIf="f['email'].errors['maxLength']">Email is too long</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Username</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input
+                    formControlName="userName"
+                    type="text"
+                    class="form-control"
+                    value="{{ user.userName }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['userName'].errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f['userName'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['userName'].errors['minlength'] || f['userName'].errors['maxLength']">
+                      Username must be between 4 and 12 characters
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Password</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control"
+                    formControlName="password"
+                    value="{{ user.password }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['password'].errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f['password'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['password'].errors['minlength'] || f['password'].errors['maxlength']">
+                      Password must be between 6 to 20 characters
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-secondary mt-2"
+                    (click)="showHidePassword()"
+                  >
+                    {{ showPassword ? "Hide" : "Show" }} Password
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9 text-secondary submit-cancel-btn">
+                  <button
+                    [disabled]="userInfoForm.pristine"
+                    type="button"
+                    (click)="onSubmit()"
+                    class="btn btn-primary px-4"
+                  >
                     Save Changes
                   </button>
-                                    <button (click)="editMode()" class="btn btn-outline-danger">
+                  <button
+                    type="button"
+                    (click)="editMode()"
+                    class="btn btn-outline-danger"
+                  >
                     Cancel changes
                   </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6" [hidden]="editable">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Full Name</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user.name }}
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Email</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user.email }}
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Address</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user.address }}
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <button class="btn btn-info" (click)="editMode()">Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              </div>
+            </form>
+          </div>
         </div>
-        <pre></pre>
-        <div class="row">
-            <h1>Your Courses</h1>
-        </div>
-        <div class="row registered-course">
-            <pre></pre>
-            <div *ngIf="registeredCourses.length === 0">
-                <h4>You dont have any courses yet</h4>
+      </div>
+      <div class="col-lg-6" [hidden]="editable">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{ user.email }}
+              </div>
             </div>
-            <div *ngFor="let course of registeredCourses">
-                <div class="col-md-3">
-                    <div class="card course-card">
-                        <img class="course-img" *ngIf="course.image.link != null" src="{{ course.image.link }}" />
-                        <img class="course-img" *ngIf="course.image.link == null" src="/assets/img/default.jpg" alt="default course img" />
-                        <div class="card-body">
-                            <h4 class="card-title title">{{ course.title }}</h4>
-                        </div>
-                        <Button id="button" (click)="courseBtn(course.id)" class="bnt btn-outline-success">Go to your course</Button
+            <hr />
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Username</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{ user.userName }}
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Password</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{ user.password }}
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-12">
+                <button class="btn btn-info" (click)="editMode()">Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre></pre>
+    <div class="row">
+      <h1>Your Courses</h1>
+    </div>
+    <div class="row registered-course">
+      <pre></pre>
+      <div *ngIf="registeredCourses.length === 0">
+        <h4>You dont have any courses yet</h4>
+      </div>
+      <div *ngFor="let course of registeredCourses">
+        <div class="col-md-3">
+          <div class="card course-card">
+            <img
+              class="course-img"
+              *ngIf="course.image.link != null"
+              src="{{ course.image.link }}"
+            />
+            <img
+              class="course-img"
+              *ngIf="course.image.link == null"
+              src="/assets/img/default.jpg"
+              alt="default course img"
+            />
+            <div class="card-body">
+              <h4 class="card-title title">{{ course.title }}</h4>
+            </div>
+            <Button
+              id="button"
+              (click)="courseBtn(course.id)"
+              class="bnt btn-outline-success"
+              >Go to your course</Button
             >
           </div>
         </div>

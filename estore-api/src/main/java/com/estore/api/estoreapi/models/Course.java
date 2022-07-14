@@ -1,42 +1,32 @@
-package com.estore.api.estoreapi.model;
+package com.estore.api.estoreapi.models;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+
+@Document(collection="courses")
 public class Course {
-    @JsonProperty("id")
-    private final int id;
-
-    @JsonProperty("image")
+    @Id
+    private String id;
     private Image image;
-
-    @JsonProperty("title")
     private String title;
-
-    @JsonProperty("price")
     private double price;
-
-    @JsonProperty("description")
     private String description;
-
-    @JsonProperty("studentsEnrolled")
     private int studentsEnrolled;
-
-    @JsonProperty("tags")
     private Set<String> tags;
-
-    @JsonProperty("content")
     private List<Lesson> content;
 
-    public Course(@JsonProperty("id") int id, @JsonProperty("image") Image image, @JsonProperty("title") String title,
-            @JsonProperty("price") double price,
-            @JsonProperty("description") String description, @JsonProperty("studentsEnrolled") int studentsEnrolled,
-            @JsonProperty("tags") Set<String> tags, @JsonProperty("content") List<Lesson> content) {
-        this.id = id;
+    public Course() {
+
+    }
+    public Course(Image image, String title, double price,
+                 String description, int studentsEnrolled,
+                 Set<String> tags,  List<Lesson> content) {
         this.image = image;
         this.title = title;
         this.price = price;
@@ -48,45 +38,45 @@ public class Course {
 
     /**
      * test constructor for writing unit tests
-     * 
+     *
      * @param id
      * @param title
      * @param price
      * @param description
      * @param tags
      */
-    public Course(int id, String title, double price, String description, Set<String> tags) {
-        this.id = id;
-        this.image = null;
-        this.title = title;
-        this.price = price;
-        this.description = description;
-        this.studentsEnrolled = 0;
-        this.tags = tags;
-        this.content = new ArrayList<>();
-    }
+    // public Course(int id, String title, double price, String description, Set<String> tags) {
+    //     this.id = id;
+    //     this.image = null;
+    //     this.title = title;
+    //     this.price = price;
+    //     this.description = description;
+    //     this.studentsEnrolled = 0;
+    //     this.tags = tags;
+    //     this.content = new ArrayList<>();
+    // }
 
     /**
      * another test constructor for writing unit tests
-     * 
+     *
      * @param id
      * @param title
      * @param price
      * @param description
      * @param tags
      */
-    public Course(int id, String title, double price, String description) {
-        this.id = id;
-        this.image = null;
-        this.title = title;
-        this.price = price;
-        this.description = description;
-        this.studentsEnrolled = 0;
-        this.tags = new HashSet<>();
-        this.content = new ArrayList<>();
-    }
+    // public Course(int id, String title, double price, String description) {
+    //     this.id = id;
+    //     this.image = null;
+    //     this.title = title;
+    //     this.price = price;
+    //     this.description = description;
+    //     this.studentsEnrolled = 0;
+    //     this.tags = new HashSet<>();
+    //     this.content = new ArrayList<>();
+    // }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -148,7 +138,7 @@ public class Course {
 
     @Override
     public int hashCode() {
-        return id + title.hashCode() + description.hashCode() + studentsEnrolled + tags.hashCode() + content.hashCode();
+        return id.hashCode() + title.hashCode() + description.hashCode() + studentsEnrolled + tags.hashCode() + content.hashCode();
     }
 
     @Override

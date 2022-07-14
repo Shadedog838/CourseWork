@@ -36,7 +36,7 @@ export class CoursePageComponent implements OnInit {
   }
 
   getCourse(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = String(this.route.snapshot.paramMap.get('id'));
     this.courseService
       .getCourse(id)
       .subscribe((course) => (this.course = course));
@@ -50,7 +50,6 @@ export class CoursePageComponent implements OnInit {
       ) {
         this.user.shoppingCart.push(course.id);
       }
-      console.log(this.user);
       this.userService
         .updateUser(this.user)
         .subscribe((userObj) => (this.user = userObj));

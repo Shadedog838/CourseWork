@@ -15,7 +15,7 @@ import { UserService } from '../user.service';
 export class CourseSearchComponent implements OnInit {
   courses$!: Observable<Course[]>;
   user: User | undefined;
-  userName?: string;
+  userId?: string;
 
   constructor(
     private courseService: CourseService,
@@ -23,7 +23,7 @@ export class CourseSearchComponent implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    this.userName = localStorage.getItem('user') || undefined;
+    this.userId = localStorage.getItem('user') || undefined;
   }
 
   ngOnInit(): void {
@@ -45,7 +45,6 @@ export class CourseSearchComponent implements OnInit {
       ) {
         this.user.shoppingCart.push(course.id);
       }
-      console.log(this.user);
       this.userService
         .updateUser(this.user)
         .subscribe((userObj) => (this.user = userObj));
@@ -58,7 +57,7 @@ export class CourseSearchComponent implements OnInit {
       this.user = undefined;
     } else {
       this.userService
-        .getUser(this.userName || '')
+        .getUser(this.userId || '')
         .subscribe((userObj) => (this.user = userObj));
     }
   }

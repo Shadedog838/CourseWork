@@ -26,7 +26,7 @@ export class CourseService {
   }
 
   /** GET course by id. Return  `undefined` when id not found */
-  getCourseNo404<Data>(id: number): Observable<Course> {
+  getCourseNo404<Data>(id: string): Observable<Course> {
     const url = `${this.coursesUrl}/?id=${id}`;
     return this.http.get<Course[]>(url).pipe(
       map((courses) => courses[0]), // returns a {0|1} element array
@@ -39,7 +39,7 @@ export class CourseService {
   }
 
   /** Get course by id. Will 404 if id not found */
-  getCourse(id: number): Observable<Course> {
+  getCourse(id: string): Observable<Course> {
     const url = `${this.coursesUrl}/${id}`;
     return this.http.get<Course>(url).pipe(
       tap((_) => CourseService.log(`fetched course id=${id}`)),
@@ -53,7 +53,7 @@ export class CourseService {
       // if not search term, return empty course array.
       return of([]);
     }
-    return this.http.get<Course[]>(`${this.coursesUrl}/?title=${term}`).pipe(
+    return this.http.get<Course[]>(`${this.coursesUrl}/?text=${term}`).pipe(
       tap((x) =>
         x.length
           ? CourseService.log(`found courses matching "${term}"`)
@@ -67,13 +67,13 @@ export class CourseService {
    * Adds a new course to the server
    *
    * @param course new course to add
-   * @param userName user name of the user adding the course
+   * @param userId user name of the user adding the course
    */
-  addCourse(course: Course, userName: string): Observable<Course> {
+  addCourse(course: Course, userId: string): Observable<Course> {
     return this.http
       .post<Course>(
         this.coursesUrl,
-        { data: course, userName },
+        { data: course, userId },
         this.httpOptions
       )
       .pipe(
@@ -89,13 +89,13 @@ export class CourseService {
    * Updates a course on the server
    *
    * @param course course to update
-   * @param userName user name of the user updating the course
+   * @param userId user name of the user updating the course
    */
-  updateCourse(course: Course, userName: string): Observable<Course> {
+  updateCourse(course: Course, userId: string): Observable<Course> {
     return this.http
       .put<Course>(
         this.coursesUrl,
-        { data: course, userName },
+        { data: course, userId },
         this.httpOptions
       )
       .pipe(
@@ -109,7 +109,7 @@ export class CourseService {
    *
    * @param id ID of the course to delete
    */
-  deleteCourse(id: number) {
+  deleteCourse(id: string) {
     const url = `${this.coursesUrl}/${id}`;
     return this.http.delete<Course>(url, this.httpOptions).pipe(
       tap((_) => CourseService.log(`deleted course id=${id}`)),
@@ -139,6 +139,6 @@ export class CourseService {
 
   /** Log a CourseService message with the MessageService */
   private static log(message: string) {
-    console.log(message);
+    // console.log(message);
   }
 }

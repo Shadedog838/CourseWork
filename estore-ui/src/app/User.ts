@@ -1,9 +1,12 @@
+import { Image } from "./Image";
+
 export interface User {
-  name: string;
-  email: string;
-  address: string;
+  id: string,
   userName: string;
-  courses: number[];
-  shoppingCart: number[];
+  password: string;
+  email: string;
+  image: Image
+  courses: string[];
+  shoppingCart: string[];
   banned: boolean;
 }

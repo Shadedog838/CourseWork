@@ -1,7 +1,7 @@
-<h1>Hi {{ user }}!</h1>
+<h1>Hi {{ user?.userName }}!</h1>
 <a (click)="logout()">
   <h2>Logout</h2>
 </a>
 
-<app-admin-page *ngIf="user?.toLowerCase() === 'admin'"></app-admin-page>
-<app-user-page *ngIf="user?.toLowerCase() !== 'admin'"></app-user-page>
+<app-admin-page *ngIf="user?.userName?.toLowerCase() === 'admin'"></app-admin-page>
+<app-user-page *ngIf="user?.userName?.toLowerCase() !== 'admin'"></app-user-page>

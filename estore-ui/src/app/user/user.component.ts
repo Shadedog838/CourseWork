@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from '../User';
 import { UserService } from '../user.service';
 
 @Component({
@@ -8,12 +9,18 @@ import { UserService } from '../user.service';
   styleUrls: ['./user.component.css'],
 })
 export class UserComponent implements OnInit {
-  user?: String;
+  userId?: string;
+  user:User
   constructor(private userService: UserService, private router: Router) {
-    this.user = localStorage.getItem('user') || undefined;
+    this.userId = localStorage.getItem('user') || undefined;
+    if (this.userId != undefined) {
+      this.userService.getUser(this.userId).subscribe((user) => (this.user = user));
+    }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
 
   async logout() {
     this.userService.logout();

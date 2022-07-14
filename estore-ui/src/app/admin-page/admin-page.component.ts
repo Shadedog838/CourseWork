@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Course } from '../course';
+import { filter } from 'rxjs/operators';
 import { CourseService } from '../course.service';
 import { User } from '../User';
 import { UserService } from '../user.service';
@@ -14,7 +15,7 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 export class AdminPageComponent implements OnInit {
   courses: Course[] = [];
   users: User[] = [];
-  userName: string;
+  adminId: string;
 
   constructor(
     private courseService: CourseService,
@@ -23,7 +24,7 @@ export class AdminPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userName = localStorage.getItem('user') ?? '';
+    this.adminId = localStorage.getItem('user') ?? '';
     this.getCourses();
     this.getUsers();
   }
@@ -34,19 +35,19 @@ export class AdminPageComponent implements OnInit {
       .subscribe((courses) => (this.courses = courses));
   }
 
-  deleteCourse(id: number) {
+  deleteCourse(id: string) {
     this.courseService.deleteCourse(id).subscribe(() => this.getCourses());
   }
 
-  banUser(userName: string) {
+  banUser(userId: string) {
     this.userService
-      .banUser(userName, this.userName)
+      .banUser(userId, this.adminId)
       .subscribe(() => this.getUsers());
   }
 
   getUsers() {
     this.userService
-      .getUsers(this.userName)
+      .getUsers(this.adminId)
       .subscribe(
         (users) =>
           (this.users = users.filter(
@@ -55,9 +56,9 @@ export class AdminPageComponent implements OnInit {
       );
   }
 
-  unbanUser(userName: string) {
+  unbanUser(userId: string) {
     this.userService
-      .unbanUser(userName, this.userName)
+      .unbanUser(userId, this.adminId)
       .subscribe(() => this.getUsers());
   }
 
@@ -73,7 +74,7 @@ export class AdminPageComponent implements OnInit {
         if (result) {
           this.courseService.deleteCourse(course.id).subscribe(() => {
             this.getCourses();
-            console.log('Course deleted');
+            // console.log('Course deleted');
           });
         }
       });

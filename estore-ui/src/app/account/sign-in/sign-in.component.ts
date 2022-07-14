@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs';
@@ -16,6 +16,7 @@ export class SignInComponent implements OnInit {
   submitted = false;
   returnUrl!: string;
   invalid = false;
+  showPassword: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,14 +34,25 @@ export class SignInComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(10),
-          Validators.pattern('^[a-zA-z]+([0-9]+)$|Admin'),
+          Validators.minLength(4),
+          Validators.maxLength(12)
         ],
       ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(20)
+        ]
+      ]
     });
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  showHidePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   get f() {
@@ -64,7 +76,6 @@ export class SignInComponent implements OnInit {
           location.replace(this.returnUrl);
         },
         error: (err) => {
-          console.log(err.message);
           this.loading = false;
           this.invalid = true;
         },

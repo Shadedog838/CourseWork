@@ -16,6 +16,9 @@ export class SignUpComponent implements OnInit {
   loading = false;
   submitted = false;
   invalid = false;
+  showPassword: boolean = false;
+  generatedPassword:boolean = false;
+  password:string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,28 +38,41 @@ export class SignUpComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(4),
-          Validators.maxLength(10),
-          Validators.pattern('[a-zA-Z]+([0-9]+)$'),
+          Validators.maxLength(12),
         ],
       ],
-      name: [
+      password: [
         '',
         [
           Validators.required,
-          Validators.minLength(5),
-          Validators.pattern('^[A-z]+ [A-z]+$'),
+          Validators.minLength(6),
+          Validators.maxLength(20),
         ],
       ],
-      email: ['', [Validators.required, Validators.pattern("[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}")]],
-      address: [
+      email: [
         '',
         [
           Validators.required,
-          Validators.minLength(3),
-          Validators.pattern('^[a-zA-z0-9. ]+$'),
+          Validators.pattern('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}'),
+          Validators.maxLength(50),
         ],
       ],
     });
+  }
+
+  showHidePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  genPassword() {
+    this.password = '';
+    const chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const passwordLength= 19;
+    for (let i=0; i<= passwordLength; ++i) {
+      let randomNumber = Math.floor(Math.random() * chars.length);
+      this.password += chars.substring(randomNumber, randomNumber+1);
+    }
+    this.generatedPassword = true;
   }
 
   get f() {

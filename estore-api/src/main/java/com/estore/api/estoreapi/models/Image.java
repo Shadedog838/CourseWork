@@ -1,13 +1,17 @@
-package com.estore.api.estoreapi.model;
+package com.estore.api.estoreapi.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "courses")
 public class Image {
 
-    @JsonProperty("link")
     private String link;
 
-    public Image(@JsonProperty("link") String link) {
+
+    public Image() {
+        
+    }
+    public Image(String link) {
         this.link = link;
     }
 

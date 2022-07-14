@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Course } from '../course';
 import { User } from '../User';
 import { UserService } from '../user.service';
+import { Image } from '../Image';
 
 @Component({
   selector: 'app-checkout-page',
@@ -14,10 +15,13 @@ export class CheckoutPageComponent implements OnInit {
   price: number = 0;
 
   user: User = {
-    userName: localStorage.getItem('user') || '',
-    name: '',
+    id:  localStorage.getItem('user') || '',
+    userName: '',
+    password: '',
     email: '',
-    address: '',
+    image: {
+      link: ''
+    },
     courses: [],
     shoppingCart: [],
     banned: false,
@@ -25,7 +29,7 @@ export class CheckoutPageComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
-    let courseId: number[] = [];
+    let courseId: string[] = [];
     let total = 0;
     this.userService
       .getUserShoppingCart(localStorage.getItem('user') || '')
@@ -41,6 +45,7 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   addcourses() {
+    // this.user.id = localStorage.getItem('user') || '';
     this.userService.checkout(this.user);
     this.router.navigate(['']);
     alert('Thank You For Your Puchcase!');

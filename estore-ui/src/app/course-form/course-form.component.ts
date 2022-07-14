@@ -55,11 +55,10 @@ export class CourseFormComponent implements OnInit {
     }
   }
 
-  submit = (course: Course, userName: string) => {
+  submit = (course: Course, userId: string) => {
     this.courseService
-      .addCourse(course, userName)
+      .addCourse(course, userId)
       .subscribe((course: Course) => {
-        console.log(course);
         this.router.navigate(['/user']);
       });
   };
@@ -89,10 +88,10 @@ export class CourseFormComponent implements OnInit {
       const courseId = params.get('courseId');
       const title = params.get('formTitle');
       this.title = title || 'Course Form';
-      if (!courseId) {
+      if (courseId == null) {
         return;
       }
-      this.courseService.getCourse(+courseId).subscribe((course) => {
+      this.courseService.getCourse(courseId).subscribe((course) => {
         this.imageUrl = course.image.link;
         this.model = {
           title: course.title,
@@ -105,11 +104,10 @@ export class CourseFormComponent implements OnInit {
         //   title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z0-9-.?:()\ \']+$')]]
         // })
         this.course = course;
-        this.submit = (course: Course, userName: string) => {
+        this.submit = (course: Course, userId: string) => {
           this.courseService
-            .updateCourse(course, userName)
+            .updateCourse(course, userId)
             .subscribe((course) => {
-              console.log(course);
               this.router.navigate(['/user']);
             });
         };
@@ -136,7 +134,6 @@ export class CourseFormComponent implements OnInit {
       content: this.model.content,
       studentsEnrolled: this.course?.studentsEnrolled ?? 0,
     };
-    console.log('Course: ' + JSON.stringify(course));
     this.submit(course, localStorage.getItem('user') ?? '');
   }
 
