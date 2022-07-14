@@ -13,6 +13,7 @@ import {
 import { Course } from './course';
 import { User } from './User';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class UserService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router:Router) {
     this.user = new Subject<User>();
     this.loginStatus = new BehaviorSubject<boolean>(false);
     let userId = localStorage.getItem('user');
@@ -235,6 +236,7 @@ export class UserService {
         this.getloginStatus()
       ) {
         this.logout();
+        this.router.navigate(['/account/login']);
         //location.replace('');
       }
 
