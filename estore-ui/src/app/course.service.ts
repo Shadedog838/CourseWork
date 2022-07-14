@@ -4,12 +4,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 
 import { Course } from './course';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CourseService {
-  private coursesUrl = 'http://localhost:8080/courses'; // URL to web api
+  coursesUrl = environment.coursesUrl;
+  // private coursesUrl = this.baseUrl+'courses'; // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

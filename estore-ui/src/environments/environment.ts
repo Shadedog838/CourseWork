@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  usersUrl: 'http://localhost:8080/users',
+  coursesUrl:'http://localhost:8080/courses'
 };
 
 /*

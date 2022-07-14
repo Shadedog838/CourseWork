@@ -12,12 +12,14 @@ import {
 
 import { Course } from './course';
 import { User } from './User';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private usersUrl = 'http://localhost:8080/users'; // URL to web api
+  usersUrl = environment.usersUrl;
+  // private usersUrl = this.baseUrl+'users'; // URL to web api
   // stores the user as an observable
   private readonly user: Subject<User>;
   // stores the login status of the user as an observable
