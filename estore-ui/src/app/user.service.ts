@@ -145,10 +145,10 @@ export class UserService {
   }
 
   /** POST: ban a user */
-  banUser(userId: string, requesterName: string): Observable<User> {
+  banUser(userId: string, requesterId: string): Observable<User> {
     const url = `${this.usersUrl}/${userId}/ban`;
     this.http
-      .post<User>(url, requesterName, this.httpOptions)
+      .post<User>(url, requesterId, this.httpOptions)
       .pipe(
         tap((updatedUser: User) => {
           UserService.log(`updated following user`);
@@ -165,10 +165,10 @@ export class UserService {
   }
 
   /** POST: unban a user */
-  unbanUser(userId: string, requesterName: string): Observable<User> {
+  unbanUser(userId: string, requesterId: string): Observable<User> {
     const url = `${this.usersUrl}/${userId}/unban`;
     this.http
-      .post<User>(url, requesterName, this.httpOptions)
+      .post<User>(url, requesterId, this.httpOptions)
       .pipe(
         tap((updatedUser: User) => {
           UserService.log(`updated following user`);

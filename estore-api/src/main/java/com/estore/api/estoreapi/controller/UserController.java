@@ -45,14 +45,14 @@ public class UserController {
 
         try {
             Optional<User> userUsername = userRepository.findByUserName(user.getUserName());
-            Optional<User> userPassword =  userRepository.findByPassword(user.getPassword());
+            Optional<User> userPassword = userRepository.findByPassword(user.getPassword());
             Optional<User> userEmail = userRepository.findByEmail(user.getEmail());
             LOG.info("userUsername: " + userUsername);
             if (userUsername.isPresent() || userPassword.isPresent() || userEmail.isPresent()) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            User _user = userRepository.save(new User(user.getUserName(), user.getPassword(), user.getEmail(), user.getImage()
-            , user.getCourses(), user.getCourses(), user.isBanned()));
+            User _user = userRepository.save(new User(user.getUserName(), user.getPassword(), user.getEmail(),
+                    user.getImage(), user.getCourses(), user.getCourses(), user.isBanned()));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage());
@@ -213,29 +213,14 @@ public class UserController {
         LOG.info("PUT /users " + request.getData());
         // only allow admins and unbanned users to update their own information
         User user = request.getData();
-        String requesterId = request.getUserId();
-        User requester = userRepository.findById(requesterId).get();
+        String userId = request.getUserId();
+        String userName = userRepository.findById(userId).get().getUserName();
         Optional<User> userData = userRepository.findById(user.getId());
-        if (requester.getUserName().equalsIgnoreCase(User.ADMIN_USER_NAME)) {
-            if (userData.isPresent()) {
-                User _user = userData.get();
-                _user.setUserName(user.getUserName());
-                _user.setPassword(user.getPassword());
-                _user.setUsersEmail(user.getEmail());
-                _user.setImage(user.getImage());
-                _user.setCourses(user.getCourses());
-                _user.setShoppinCart(user.getShoppingCart());
-                _user.setBanned(user.isBanned());
-                LOG.info("PUT /users " + _user);
-                return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-        if (userData.get() != null && userData.get().isBanned()) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+
         if (userData.isPresent()) {
+            if (!userName.equalsIgnoreCase(User.ADMIN_USER_NAME) && userData.get().isBanned()) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
             User _user = userData.get();
             _user.setUserName(user.getUserName());
             _user.setPassword(user.getPassword());
