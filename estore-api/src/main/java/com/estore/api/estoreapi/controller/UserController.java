@@ -169,7 +169,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         user.setBanned(true);
-        return updateUser(id, user);
+        return updateUser(new AuthenticatedRequest<User>(user, requesterId));
     }
 
     /**
@@ -194,7 +194,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         user.setBanned(false);
-        return updateUser(id, user);
+        return updateUser(new AuthenticatedRequest<User>(user, requesterId));
     }
 
     /**
@@ -209,11 +209,29 @@ public class UserController {
      *         not an admin
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
-        LOG.info("PUT /users " + user);
+    public ResponseEntity<User> updateUser(@RequestBody AuthenticatedRequest<User> request) {
+        LOG.info("PUT /users " + request.getData());
         // only allow admins and unbanned users to update their own information
-
-        Optional<User> userData = userRepository.findById(id);
+        User user = request.getData();
+        String requesterId = request.getUserId();
+        User requester = userRepository.findById(requesterId).get();
+        Optional<User> userData = userRepository.findById(user.getId());
+        if (requester.getUserName().equalsIgnoreCase(User.ADMIN_USER_NAME)) {
+            if (userData.isPresent()) {
+                User _user = userData.get();
+                _user.setUserName(user.getUserName());
+                _user.setPassword(user.getPassword());
+                _user.setUsersEmail(user.getEmail());
+                _user.setImage(user.getImage());
+                _user.setCourses(user.getCourses());
+                _user.setShoppinCart(user.getShoppingCart());
+                _user.setBanned(user.isBanned());
+                LOG.info("PUT /users " + _user);
+                return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
         if (userData.get() != null && userData.get().isBanned()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

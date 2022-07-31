@@ -29,7 +29,7 @@ export class UserService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  constructor(private http: HttpClient, private router:Router) {
+  constructor(private http: HttpClient, private router: Router) {
     this.user = new Subject<User>();
     this.loginStatus = new BehaviorSubject<boolean>(false);
     let userId = localStorage.getItem('user');
@@ -95,12 +95,8 @@ export class UserService {
   getUserCourses(userId: string): Observable<Course[]> {
     const url = `${this.usersUrl}/${userId}/courses`;
     return this.http.get<Course[]>(url).pipe(
-      tap((_) =>
-        UserService.log(`fetched user courses userId = ${userId}`)
-      ),
-      catchError(
-        this.handleError<Course[]>(`getUserCourses userId=${userId}`)
-      )
+      tap((_) => UserService.log(`fetched user courses userId = ${userId}`)),
+      catchError(this.handleError<Course[]>(`getUserCourses userId=${userId}`))
     );
   }
   /**
@@ -109,7 +105,12 @@ export class UserService {
    * @returns User Observable
    */
   updateUser(user: User): Observable<User> {
-    this.http.put<User>(`${this.usersUrl}/${user.id}`, user, this.httpOptions)
+    this.http
+      .put<User>(
+        `${this.usersUrl}/${user.id}`,
+        { data: user, userId: user.id },
+        this.httpOptions
+      )
       .pipe(
         tap((updatedUser: User) => {
           UserService.log(`updated following user`);
