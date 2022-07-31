@@ -5,6 +5,7 @@ import { CourseService } from '../course.service';
 import { User } from '../User';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { AlertService } from '../alert';
 
 @Component({
   selector: 'app-courses',
@@ -18,12 +19,16 @@ export class CoursesComponent implements OnInit {
   user: User | undefined;
   userPrevious: User | undefined;
 
-  // userName?: String;
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false,
+  }
 
   constructor(
     private courseService: CourseService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +66,9 @@ export class CoursesComponent implements OnInit {
         !this.user.courses.includes(course.id)
       ) {
         this.user.shoppingCart.push(course.id);
+        this.alertService.success("New course added to cart!", this.options);
+      } else {
+        this.alertService.error("This course has already been added to cart or purchased!", this.options);
       }
       this.userService
         .updateUser(this.user)

@@ -7,6 +7,7 @@ import { ModalComponent } from '../modal/modal.component';
 import { lesson } from '../lesson';
 import { UserService } from '../user.service';
 import { User } from '../User';
+import { AlertService } from '../alert/alert.service';
 
 @Component({
   selector: 'app-course-page',
@@ -18,12 +19,18 @@ export class CoursePageComponent implements OnInit {
   userName: string | undefined;
   user: User | undefined;
 
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false,
+  }
+
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
     private matDialog: MatDialog,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +56,9 @@ export class CoursePageComponent implements OnInit {
         !this.user.courses.includes(course.id)
       ) {
         this.user.shoppingCart.push(course.id);
+        this.alertService.success("New course added to cart!", this.options);
+      } else {
+        this.alertService.error("This course has already been added to cart or purchased!", this.options);
       }
       this.userService
         .updateUser(this.user)

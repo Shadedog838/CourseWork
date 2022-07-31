@@ -6,6 +6,7 @@ import { Course } from '../course';
 import { CourseService } from '../course.service';
 import { User } from '../User';
 import { UserService } from '../user.service';
+import { AlertService } from '../alert';
 
 @Component({
   selector: 'app-course-search',
@@ -17,11 +18,18 @@ export class CourseSearchComponent implements OnInit {
   user: User | undefined;
   userId?: string;
 
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false,
+  }
+
+
   constructor(
     private courseService: CourseService,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private alertService: AlertService
   ) {
     this.userId = localStorage.getItem('user') || undefined;
   }
@@ -44,6 +52,9 @@ export class CourseSearchComponent implements OnInit {
         !this.user.courses.includes(course.id)
       ) {
         this.user.shoppingCart.push(course.id);
+        this.alertService.success("New course added to cart!", this.options);
+      } else {
+        this.alertService.error("This course has already been added to cart or purchased!", this.options);
       }
       this.userService
         .updateUser(this.user)

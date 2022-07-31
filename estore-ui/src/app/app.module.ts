@@ -23,6 +23,7 @@ import { ModalComponent } from './modal/modal.component';
 import { LessonModalComponent } from './lesson-modal/lesson-modal.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
+import { AlertModule } from './alert';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    AlertModule
   ],
   providers: [],
   bootstrap: [AppComponent],
