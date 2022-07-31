@@ -214,6 +214,9 @@ public class UserController {
         // only allow admins and unbanned users to update their own information
 
         Optional<User> userData = userRepository.findById(id);
+        if (userData.get() != null && userData.get().isBanned()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         if (userData.isPresent()) {
             User _user = userData.get();
             _user.setUserName(user.getUserName());
