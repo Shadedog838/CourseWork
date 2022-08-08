@@ -23,7 +23,7 @@ import { ModalComponent } from './modal/modal.component';
 import { LessonModalComponent } from './lesson-modal/lesson-modal.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
-import { AlertModule } from './alert';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { AlertModule } from './alert';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    AlertModule
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

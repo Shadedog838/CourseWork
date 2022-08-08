@@ -7,7 +7,7 @@ import { ModalComponent } from '../modal/modal.component';
 import { lesson } from '../lesson';
 import { UserService } from '../user.service';
 import { User } from '../User';
-import { AlertService } from '../alert/alert.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-course-page',
@@ -30,7 +30,7 @@ export class CoursePageComponent implements OnInit {
     private matDialog: MatDialog,
     private userService: UserService,
     private router: Router,
-    private alertService: AlertService
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -56,9 +56,12 @@ export class CoursePageComponent implements OnInit {
         !this.user.courses.includes(course.id)
       ) {
         this.user.shoppingCart.push(course.id);
-        this.alertService.success("New course added to cart!", this.options);
+        this.toastr.success(course.title + ' has been added to your cart!', 'Success');
       } else {
-        this.alertService.error("This course has already been added to cart or purchased!", this.options);
+        this.toastr.error(
+          course.title + ' has already been added to your cart or purchased!',
+          'Error'
+        );
       }
       this.userService
         .updateUser(this.user)

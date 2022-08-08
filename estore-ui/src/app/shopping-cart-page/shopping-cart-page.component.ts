@@ -4,6 +4,7 @@ import { Course } from '../course';
 import { User } from '../User';
 import { UserService } from '../user.service';
 import { concatMap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-shopping-cart-page',
@@ -14,8 +15,12 @@ export class ShoppingCartPageComponent implements OnInit {
   public cart: Course[] = [];
   user: User | undefined = undefined;
 
-  constructor(private router: Router, private userService: UserService) {
-    if ( !this.userService.getloginStatus()) {
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private toastr: ToastrService
+  ) {
+    if (!this.userService.getloginStatus()) {
       this.router.navigate(['']);
     }
   }
@@ -25,7 +30,6 @@ export class ShoppingCartPageComponent implements OnInit {
   }
 
   getCart(): void {
-
     if (this.userService.getloginStatus()) {
       this.userService
         .getUserShoppingCart(this.user?.userName || '')
@@ -55,6 +59,7 @@ export class ShoppingCartPageComponent implements OnInit {
         this.user.shoppingCart = this.user.shoppingCart.filter(
           (c) => c !== course.id
         );
+        this.toastr.success( course.title + " has been removed from your cart!", "Course Removed")
       }
       this.userService
         .updateUser(this.user)

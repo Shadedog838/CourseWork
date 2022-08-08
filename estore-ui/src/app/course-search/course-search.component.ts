@@ -6,7 +6,7 @@ import { Course } from '../course';
 import { CourseService } from '../course.service';
 import { User } from '../User';
 import { UserService } from '../user.service';
-import { AlertService } from '../alert';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-course-search',
@@ -29,7 +29,7 @@ export class CourseSearchComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private alertService: AlertService
+    private toastr: ToastrService
   ) {
     this.userId = localStorage.getItem('user') || undefined;
   }
@@ -52,9 +52,12 @@ export class CourseSearchComponent implements OnInit {
         !this.user.courses.includes(course.id)
       ) {
         this.user.shoppingCart.push(course.id);
-        this.alertService.success("New course added to cart!", this.options);
+        this.toastr.success(course.title + ' has been added to your cart!', 'Success');
       } else {
-        this.alertService.error("This course has already been added to cart or purchased!", this.options);
+        this.toastr.error(
+          course.title + ' has already been added to your cart or purchased!',
+          'Error'
+        );
       }
       this.userService
         .updateUser(this.user)

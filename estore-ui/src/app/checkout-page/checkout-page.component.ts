@@ -4,6 +4,7 @@ import { Course } from '../course';
 import { User } from '../User';
 import { UserService } from '../user.service';
 import { Image } from '../Image';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-checkout-page',
@@ -15,18 +16,22 @@ export class CheckoutPageComponent implements OnInit {
   price: number = 0;
 
   user: User = {
-    id:  localStorage.getItem('user') || '',
+    id: localStorage.getItem('user') || '',
     userName: '',
     password: '',
     email: '',
     image: {
-      link: ''
+      link: '',
     },
     courses: [],
     shoppingCart: [],
     banned: false,
   };
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     let courseId: string[] = [];
@@ -48,6 +53,6 @@ export class CheckoutPageComponent implements OnInit {
     // this.user.id = localStorage.getItem('user') || '';
     this.userService.checkout(this.user);
     this.router.navigate(['']);
-    alert('Thank You For Your Puchcase!');
+    this.toastr.success("Thank You For Your Purschase!", "Success");
   }
 }

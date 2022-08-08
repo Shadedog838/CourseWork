@@ -5,7 +5,7 @@ import { CourseService } from '../course.service';
 import { User } from '../User';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
-import { AlertService } from '../alert';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-courses',
@@ -22,13 +22,13 @@ export class CoursesComponent implements OnInit {
   options = {
     autoClose: true,
     keepAfterRouteChange: false,
-  }
+  };
 
   constructor(
     private courseService: CourseService,
     private userService: UserService,
     private router: Router,
-    private alertService: AlertService
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -66,9 +66,12 @@ export class CoursesComponent implements OnInit {
         !this.user.courses.includes(course.id)
       ) {
         this.user.shoppingCart.push(course.id);
-        this.alertService.success("New course added to cart!", this.options);
+        this.toastr.success(course.title + ' has been added your to cart!', 'Success');
       } else {
-        this.alertService.error("This course has already been added to cart or purchased!", this.options);
+        this.toastr.error(
+           course.title + ' has already been added to your cart or purchased!',
+          'Error'
+        );
       }
       this.userService
         .updateUser(this.user)
