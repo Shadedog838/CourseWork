@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  * method handler to the Spring framework
  */
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("courses")
 public class CourseController {

@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import com.estore.api.estoreapi.repository.CourseRepository;
 import com.estore.api.estoreapi.repository.UserRepository;
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("users")
 public class UserController {
