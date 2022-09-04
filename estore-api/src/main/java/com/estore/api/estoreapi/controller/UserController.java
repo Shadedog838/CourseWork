@@ -5,6 +5,7 @@ import com.estore.api.estoreapi.helper.DataHelper;
 import com.estore.api.estoreapi.models.Course;
 import com.estore.api.estoreapi.models.User;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
