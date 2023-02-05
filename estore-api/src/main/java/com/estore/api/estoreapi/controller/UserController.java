@@ -5,7 +5,6 @@ import com.estore.api.estoreapi.helper.DataHelper;
 import com.estore.api.estoreapi.models.Course;
 import com.estore.api.estoreapi.models.User;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import java.util.logging.Logger;
 import com.estore.api.estoreapi.repository.CourseRepository;
 import com.estore.api.estoreapi.repository.UserRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("users")
 public class UserController {
